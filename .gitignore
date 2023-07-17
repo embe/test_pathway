@@ -1,0 +1,10 @@
+output.txt
+python/pathway/twitter_output
+python/pathway/twitter_data/
+python/pathway/filter_dokwon.txt
+python/pathway/.output_mine.txt
+table.csv
+examples/example_ffi.py
+.test_*
+.coverage_report*/
+*.lcov
