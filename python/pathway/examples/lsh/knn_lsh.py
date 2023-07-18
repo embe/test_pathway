@@ -79,18 +79,12 @@ def knn_lsh_generic_classifier_train(
 
     band_col_names = [make_band_col_name(i) for i in range(L)]
     data += data.select(buckets=pw.apply(lsh_projection, data.data))
-    # Fix "UserWarning: Object in (<table1>.buckets)[8] is of type numpy.ndarray
-    # but its number of dimensions is not known." when calling unpack_col with ndarray.
-    # pw.cast not working and unpack_col doesnt take pw.apply so I used pw.apply separately.
-    buckets_list = data.select(buckets=pw.apply(list, data.buckets))
-    data += unpack_col(buckets_list.buckets, *band_col_names)
+    data += unpack_col(data.buckets, *band_col_names)
 
     def lsh_perform_query(queries: pw.Table, k):
-        queries += queries.select(buckets=pw.apply(lsh_projection, queries.data))
 
-        # Same Fix "UserWarning: ... above"
-        buckets_list = queries.select(buckets=pw.apply(list, queries.buckets))
-        queries += unpack_col(buckets_list.buckets, *band_col_names)
+        queries += queries.select(buckets=pw.apply(lsh_projection, queries.data))
+        queries += unpack_col(queries.buckets, *band_col_names)
 
         # step 2: for each query, take union of matching databuckets
         result = queries

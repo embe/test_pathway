@@ -1,7 +1,6 @@
 import asyncio
 import json
-import logging
-from typing import Any, Callable, Dict, Optional, Tuple, Type
+from typing import Any, Callable, Dict, Tuple
 from uuid import uuid4
 
 from aiohttp import web
@@ -22,16 +21,12 @@ class RestServerSubject(io.python.ConnectorSubject):
         port: int,
         loop: asyncio.AbstractEventLoop,
         tasks: Dict[Any, Any],
-        schema: Type[pw.Schema],
-        format: str = "raw",
     ) -> None:
         super().__init__()
         self._host = host
         self._port = port
         self._loop = loop
         self._tasks = tasks
-        self._schema = schema
-        self._format = format
 
     def run(self):
         app = web.Application()
@@ -42,28 +37,18 @@ class RestServerSubject(io.python.ConnectorSubject):
 
     async def handle(self, request):
         id = unsafe_make_pointer(uuid4().int)
-
-        if self._format == "raw":
-            payload = {"query": await request.text()}
-        elif self._format == "custom":
-            try:
-                payload = await request.json()
-            except json.decoder.JSONDecodeError:
-                raise web.HTTPBadRequest(reason="payload is not a valid json")
-
-        self._verify_payload(payload)
-
+        query = await request.text()
         event = asyncio.Event()
-        data = json.dumps(payload).encode()
 
         self._tasks[id] = {
             "event": event,
             "result": "-PENDING-",
         }
 
-        self._add(id, data)
+        payload = json.dumps({"query": query}).encode()
+        self._add(id, payload)
+
         response = await self._fetch_response(id, event)
-        # self._remove(id, data)
         return web.json_response(status=200, data=response)
 
     async def _fetch_response(self, id, event) -> Any:
@@ -71,50 +56,28 @@ class RestServerSubject(io.python.ConnectorSubject):
         task = self._tasks.pop(id)
         return task["result"]
 
-    def _verify_payload(self, payload: dict):
-        for column in self._schema.keys():
-            if column not in payload:
-                raise web.HTTPBadRequest(reason=f"`{column}` is required")
 
-
-def rest_connector(
-    host: str,
-    port: int,
-    schema: Optional[Type[pw.Schema]] = None,
-    autocommit_duration_ms=1500,
-) -> Tuple[pw.Table, Callable]:
+def rest_connector(host: str, port: int) -> Tuple[pw.Table, Callable]:
     loop = asyncio.new_event_loop()
     tasks: Dict[Any, Any] = {}
 
-    if schema is None:
-        format = "raw"
-        schema = pw.schema_builder({"query": pw.column_definition()})
-    else:
-        format = "custom"
-
     input_table = io.python.read(
-        subject=RestServerSubject(
-            host=host, port=port, loop=loop, tasks=tasks, schema=schema, format=format
+        subject=RestServerSubject(host=host, port=port, loop=loop, tasks=tasks),
+        schema=pw.schema_builder(
+            {
+                "query": pw.column_definition(),
+            }
         ),
-        schema=schema,
         format="json",
-        autocommit_duration_ms=autocommit_duration_ms,
     )
 
     def response_writer(responses: pw.Table):
         def on_change(
             key: BasePointer, row: Dict[str, Any], time: int, is_addition: bool
         ):
-            if is_addition is False:
-                return
-
             task = tasks.get(key, None)
 
-            if task is None:
-                logging.info(
-                    "Query response has changed. It probably indicates an error in the pipeline."
-                )
-                return
+            assert task is not None, "query not found"
 
             def set_task():
                 task["result"] = row["result"]

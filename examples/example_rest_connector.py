@@ -12,15 +12,10 @@ def logic(queries: pw.Table) -> pw.Table:
     )
 
 
-class InputSchema(pw.Schema):
-    query: str
-    user: str
-
-
 queries, response_writer = pw.io.http.rest_connector(
-    host=HTTP_HOST, port=int(HTTP_PORT), schema=InputSchema
+    host=HTTP_HOST, port=int(HTTP_PORT)
 )
 responses = logic(queries)
 response_writer(responses)
 
-pw.run_all(debug=True, monitoring_level=pw.MonitoringLevel.NONE)
+pw.run_all(debug=True)
