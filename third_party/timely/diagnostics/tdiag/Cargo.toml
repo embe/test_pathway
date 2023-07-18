@@ -1,0 +1,17 @@
+[package]
+name = "tdiag"
+version = "0.2.1-pre"
+authors = ["Andrea Lattuada <andrea@lattuada.me>"]
+homepage = "https://github.com/TimelyDataflow/diagnostics"
+repository = "https://github.com/TimelyDataflow/diagnostics.git"
+description = "Tools to inspect a timely-dataflow computation"
+license = "MIT"
+
+edition = "2018"
+
+[dependencies]
+timely = { path = "../../timely-dataflow/timely" }
+differential-dataflow = { path = "../../differential-dataflow" }
+clap = "^2.33"
+# tdiag-connect = "^0.2"
+tdiag-connect = { path = "../connect" }

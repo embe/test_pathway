@@ -1,0 +1,13 @@
+[package]
+name = "tdiag-connect"
+version = "0.2.1-pre"
+authors = ["Andrea Lattuada <andrea@lattuada.me>"]
+homepage = "https://github.com/TimelyDataflow/diagnostics"
+repository = "https://github.com/TimelyDataflow/diagnostics.git"
+description = "Helpers to obtain traces suitable for diagnostics from timely / differential."
+license = "MIT"
+
+edition = "2018"
+
+[dependencies]
+timely = { path = "../../timely-dataflow/timely" }

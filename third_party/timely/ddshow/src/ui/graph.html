@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <!-- d3.js requires a utf8 charset (and so does the modern world) -->
+        <meta charset="UTF-8" />
+        <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+        <!-- TODO: Maybe name this by the targeted project? -->
+        <title>Dataflow Graph</title>
+
+        <style>
+            {{ stylesheet }}
+        </style>
+    </head>
+
+    <!-- Load d3.js and dagre d3 -->
+    <!-- FIXME: Dagre is unmaintained, switch to cytoscape.js -->
+    <script src="./d3.v5.js"></script>
+    <script src="./dagre-d3.js"></script>
+
+    <!-- Load the stuff required for vega charts -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+
+    <body>
+        <div id="dataflow-graph-div">
+            <svg id="dataflow-graph"></svg>
+        </div>
+
+        <div id="stats-graphs" style="width: 100%; height: 100%"></div>
+
+        <script type="text/javascript" src="./graph.js"></script>
+    </body>
+
+</html>

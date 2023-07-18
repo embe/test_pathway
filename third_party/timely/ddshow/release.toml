@@ -1,0 +1,43 @@
+pre-release-commit-message = "Release v{{version}}"
+no-dev-version = true
+tag-message = "v{{version}}"
+tag-name = "v{{version}}"
+sign-commit = true
+sign-tag = true
+
+[[pre-release-replacements]]
+file = "Changelog.md"
+search = "Unreleased"
+replace = "{{version}}"
+
+[[pre-release-replacements]]
+file = "Changelog.md"
+search = "\\.\\.\\.HEAD"
+replace = "...{{tag_name}}"
+
+[[pre-release-replacements]]
+file = "Changelog.md"
+search = "ReleaseDate"
+replace = "{{date}}"
+
+[[pre-release-replacements]]
+file = "Changelog.md"
+search = "<!-- next-header -->"
+replace = "<!-- next-header -->\n## [Unreleased] - ReleaseDate\n"
+
+[[pre-release-replacements]]
+file = "Changelog.md"
+search = "<!-- next-url -->"
+replace = "<!-- next-url -->\n[Unreleased]: https://github.com/Kixiron/ddshow/compare/{{tag_name}}...HEAD"
+
+[[pre-release-replacements]]
+file = "Cargo.toml"
+search = "\\[dependencies.ddshow-sink\\]\n    version = \"\\{\\{prev_version}}\""
+replace = "[dependencies.ddshow-sink]\n    version = \"{{version}}\""
+min = 0
+
+[[pre-release-replacements]]
+file = "Cargo.toml"
+search = "\\[dependencies.ddshow-types\\]\n    version = \"\\{\\{prev_version}}\""
+replace = "[dependencies.ddshow-types]\n    version = \"{{version}}\""
+min = 0
