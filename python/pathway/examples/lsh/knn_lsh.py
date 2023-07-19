@@ -33,10 +33,9 @@ import numpy as np
 
 # TODO change to `import pathway as pw` when it is not imported as part of stdlib, OR move the whole file to stdlib
 import pathway.internals as pw
+from pathway.examples.lsh.lsh import generate_euclidean_lsh_bucketer
 from pathway.internals.helpers import StableSet
 from pathway.stdlib.utils.col import groupby_reduce_majority, unpack_col
-
-from ._lsh import generate_euclidean_lsh_bucketer
 
 
 class DataPoint(pw.Schema):
@@ -80,18 +79,12 @@ def knn_lsh_generic_classifier_train(
 
     band_col_names = [make_band_col_name(i) for i in range(L)]
     data += data.select(buckets=pw.apply(lsh_projection, data.data))
-    # Fix "UserWarning: Object in (<table1>.buckets)[8] is of type numpy.ndarray
-    # but its number of dimensions is not known." when calling unpack_col with ndarray.
-    # pw.cast not working and unpack_col doesnt take pw.apply so I used pw.apply separately.
-    buckets_list = data.select(buckets=pw.apply(list, data.buckets))
-    data += unpack_col(buckets_list.buckets, *band_col_names)
+    data += unpack_col(data.buckets, *band_col_names)
 
     def lsh_perform_query(queries: pw.Table, k):
-        queries += queries.select(buckets=pw.apply(lsh_projection, queries.data))
 
-        # Same Fix "UserWarning: ... above"
-        buckets_list = queries.select(buckets=pw.apply(list, queries.buckets))
-        queries += unpack_col(buckets_list.buckets, *band_col_names)
+        queries += queries.select(buckets=pw.apply(lsh_projection, queries.data))
+        queries += unpack_col(queries.buckets, *band_col_names)
 
         # step 2: for each query, take union of matching databuckets
         result = queries
@@ -159,7 +152,7 @@ def knn_lsh_generic_classifier_train(
                     ]  # neighs - 1 in argpartition, because of 0-based indexing
                     return np.array(self.ids)[knn_ids]
 
-        knn_result = compute_knns_transformer(  # type: ignore
+        knn_result = compute_knns_transformer(
             training_data=data, flattened=flattened
         ).flattened.select(pw.this.knns_ids, query_id=pw.this.query_id_output)
 
@@ -208,9 +201,9 @@ def knn_lsh_classify(knn_model, data_labels, queries, k):
 
     # resultA = process_knn_no_transformers(data_labels, knns)
     # resultB = process_knn_two_transformers(data_labels, knns)
-    result = take_majority_label(
-        labels=data_labels, knn_table=knns  # type: ignore
-    ).knn_table.with_id(knns.query_id)
+    result = take_majority_label(labels=data_labels, knn_table=knns).knn_table.with_id(
+        knns.query_id
+    )
 
     return result
 
@@ -256,13 +249,13 @@ def process_knn_no_transformers(data_labels, knns):
 
 def process_knn_two_transformers(data_labels, knns):
     labeled = (
-        substitute_with_labels(labels=data_labels, knn_table=knns)  # type: ignore
+        substitute_with_labels(labels=data_labels, knn_table=knns)
         .knn_table.select(labels=pw.this.knn_labels)
         .with_id(knns.query_id)
     )
 
     result: pw.Table = (
-        compute_mode_empty_to_none(labeled.select(items=labeled.labels))  # type: ignore
+        compute_mode_empty_to_none(labeled.select(items=labeled.labels))
         .data.select(predicted_label=pw.this.mode)
         .with_id(labeled.id)
     )

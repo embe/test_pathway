@@ -30,8 +30,7 @@ from __future__ import annotations
 import numpy as np
 
 import pathway as pw
-
-from ._lsh import lsh
+from pathway.examples.lsh.lsh import lsh
 
 
 class DataPoint(pw.Schema):

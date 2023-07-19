@@ -9,19 +9,19 @@ from typing import Callable, Iterable, List, Optional, Tuple
 from pathway.internals import api, column, environ
 from pathway.internals import parse_graph as graph
 from pathway.internals import table
-from pathway.internals.graph_runner.async_utils import new_event_loop
-from pathway.internals.graph_runner.operator_handler import OperatorHandler
-from pathway.internals.graph_runner.row_transformer_operator_handler import (  # noqa: registers handler for RowTransformerOperator
-    RowTransformerOperatorHandler,
-)
-from pathway.internals.graph_runner.scope_context import ScopeContext
-from pathway.internals.graph_runner.state import ScopeState
 from pathway.internals.helpers import StableSet
 from pathway.internals.monitoring import MonitoringLevel, monitor_stats
 from pathway.internals.operator import ContextualizedExpressionOperator, Operator
+from pathway.internals.rustpy_builder.async_utils import new_event_loop
+from pathway.internals.rustpy_builder.operator_handler import OperatorHandler
+from pathway.internals.rustpy_builder.row_transformer_operator_handler import (  # noqa: registers handler for RowTransformerOperator
+    RowTransformerOperatorHandler,
+)
+from pathway.internals.rustpy_builder.scope_context import ScopeContext
+from pathway.internals.rustpy_builder.state import ScopeState
 
 
-class GraphRunner:
+class RustpyBuilder:
     """Runs evaluation of ParseGraph."""
 
     _graph: graph.ParseGraph
@@ -169,5 +169,5 @@ class GraphRunner:
 
 
 __all__ = [
-    "GraphRunner",
+    "RustbyBuilder",
 ]

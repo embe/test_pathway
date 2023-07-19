@@ -6,8 +6,7 @@ from __future__ import annotations
 
 import pathway as pw
 from pathway import Table, apply_with_type, this
-from pathway.internals import api
-from pathway.stdlib.ml.smart_table_ops import (
+from pathway.examples.fuzzy_join import (
     FuzzyJoinFeatureGeneration,
     FuzzyJoinNormalization,
     fuzzy_match,
@@ -16,6 +15,7 @@ from pathway.stdlib.ml.smart_table_ops import (
     fuzzy_self_match,
     smart_fuzzy_match,
 )
+from pathway.internals import api
 from pathway.tests.utils import (
     T,
     assert_table_equality_wo_index,

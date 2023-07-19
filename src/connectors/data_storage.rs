@@ -255,7 +255,7 @@ pub trait ReaderBuilder: Send + 'static {
 
     fn name(&self, id: usize) -> String {
         let desc = self.short_description();
-        let name = desc.split("::").last().unwrap().replace("Builder", "");
+        let name = desc.split("::").last().unwrap();
         if let Some(id) = self.persistent_id() {
             format!("{name}-{id}")
         } else {

@@ -129,7 +129,7 @@ def fuzzy_match_tables(
 
     # We compute the projections spaces and for each bucket b we keep track of the
     # corresponding columns which are projected into b.
-    set_buckets: StableSet[str] = StableSet()
+    set_buckets = StableSet()
     buckets_left: dict[str, list] = {}
     buckets_right: dict[str, list] = {}
 
@@ -184,7 +184,7 @@ def _fuzzy_match_tables(
     left_table: pw.Table,
     right_table: pw.Table,
     *,
-    by_hand_match: Optional[pw.Table[JoinResult]] = None,
+    by_hand_match: pw.Table[JoinResult] = None,
     normalization=FuzzyJoinNormalization.LOGWEIGHT,
     feature_generation=FuzzyJoinFeatureGeneration.AUTO,
 ) -> pw.Table[JoinResult]:
@@ -219,7 +219,7 @@ def smart_fuzzy_match(
     else:
         tabs = [left, right]
     processed = []
-    features: pw.Table = None  # type: ignore
+    features = None
     for tab, col in zip(tabs, [left_col, right_col]):
         edges = tab.select(feature=pw.apply(feature_generation.generate, col)).flatten(
             pw.this.feature, origin_id=pw.this.id
@@ -241,13 +241,11 @@ def smart_fuzzy_match(
             features = features.update_rows(features_tmp)
         processed.append(edges)
     if self_match:
-        [edges] = processed
-        return fuzzy_self_match(edges, features, by_hand_match, HEAVY_LIGHT_THRESHOLD)
-    else:
-        [edges_left, edges_right] = processed
-        return fuzzy_match(
-            edges_left, edges_right, features, by_hand_match, HEAVY_LIGHT_THRESHOLD
+        return fuzzy_self_match(
+            *processed, features, by_hand_match, HEAVY_LIGHT_THRESHOLD
         )
+    else:
+        return fuzzy_match(*processed, features, by_hand_match, HEAVY_LIGHT_THRESHOLD)
 
 
 def fuzzy_self_match(

@@ -10,6 +10,8 @@ import pandas as pd
 
 from pathway import this
 from pathway.debug import table_to_pandas
+from pathway.examples.linked_list import linked_list_transformer, reverse_linked_list
+from pathway.examples.skiplist import compute_shortcuts
 from pathway.internals.api import unsafe_make_pointer
 from pathway.tests.utils import (
     T,
@@ -17,9 +19,6 @@ from pathway.tests.utils import (
     assert_table_equality_wo_types,
     xfail_on_rust,
 )
-
-from .examples.linked_list import linked_list_transformer, reverse_linked_list
-from .examples.skiplist import compute_shortcuts
 
 
 @xfail_on_rust(reason="passing lambda inside a transformer")

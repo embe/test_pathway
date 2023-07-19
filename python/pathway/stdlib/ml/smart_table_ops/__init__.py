@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from ._fuzzy_join import (
+from pathway.examples.fuzzy_join import (
     Edge,
     Feature,
     FuzzyJoinFeatureGeneration,
