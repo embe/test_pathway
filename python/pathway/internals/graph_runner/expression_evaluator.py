@@ -25,16 +25,16 @@ from pathway.internals import _reducers, api, asynchronous
 from pathway.internals.dtype import unoptionalize  # type: ignore
 from pathway.internals.expression_printer import get_expression_info
 from pathway.internals.expression_visitor import ExpressionVisitor
-from pathway.internals.rustpy_builder.operator_mapping import (
+from pathway.internals.graph_runner.operator_mapping import (
     get_binary_operators_mapping,
     get_binary_operators_mapping_optionals,
     get_cast_operators_mapping,
     get_unary_operators_mapping,
 )
-from pathway.internals.rustpy_builder.scope_context import ScopeContext
+from pathway.internals.graph_runner.scope_context import ScopeContext
 
 if TYPE_CHECKING:
-    from pathway.internals.rustpy_builder.state import ScopeState
+    from pathway.internals.graph_runner.state import ScopeState
 
 
 def column_eval_properties(column: clmn.ColumnWithContext) -> api.EvalProperties:

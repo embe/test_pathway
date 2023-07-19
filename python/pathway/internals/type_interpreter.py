@@ -21,7 +21,7 @@ from pathway.internals.dtype import (  # type: ignore
 )
 from pathway.internals.expression_printer import get_expression_info
 from pathway.internals.expression_visitor import ExpressionVisitor
-from pathway.internals.rustpy_builder.operator_mapping import (
+from pathway.internals.graph_runner.operator_mapping import (
     get_binary_operators_mapping,
     get_binary_operators_mapping_optionals,
     get_unary_operators_mapping,

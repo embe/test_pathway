@@ -19,7 +19,7 @@ import pathway as pw
 from pathway.debug import _markdown_to_pandas, parse_to_table, table_from_pandas
 from pathway.internals import api, datasource
 from pathway.internals.decorators import table_from_datasource
-from pathway.internals.rustpy_builder import RustpyBuilder
+from pathway.internals.graph_runner import GraphRunner
 from pathway.internals.schema import Schema, is_subschema, schema_from_columns
 from pathway.internals.table import Table
 
@@ -90,7 +90,7 @@ def run_graph_and_validate_result(verifier: Callable, assert_schemas=True):
             raise RuntimeError(
                 f"Mismatched column names, {list(table.column_names())} vs {list(expected.column_names())}"
             )
-        [captured_table, captured_expected] = RustpyBuilder(
+        [captured_table, captured_expected] = GraphRunner(
             table._source.graph, monitoring_level=pw.MonitoringLevel.NONE
         ).run_tables(table, expected)
         return verifier(captured_table, captured_expected)

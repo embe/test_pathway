@@ -17,7 +17,7 @@ from pathway.internals.shadows import inspect
 if TYPE_CHECKING:
     from pathway import Table
     from pathway.internals.api import Pointer
-    from pathway.internals.rustpy_builder.row_transformer_operator_handler import (
+    from pathway.internals.graph_runner.row_transformer_operator_handler import (
         RowReference,
     )
     from pathway.internals.universe import Universe

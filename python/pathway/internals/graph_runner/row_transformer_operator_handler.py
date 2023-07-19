@@ -9,6 +9,8 @@ from typing import Any, Dict, List, Tuple
 
 import pathway.internals.row_transformer as rt
 from pathway.internals import api, trace, universe
+from pathway.internals.graph_runner.operator_handler import OperatorHandler
+from pathway.internals.graph_runner.state import ScopeState
 from pathway.internals.operator import RowTransformerOperator
 from pathway.internals.row_transformer_table import (
     InputAttributeTransformerColumn,
@@ -19,8 +21,6 @@ from pathway.internals.row_transformer_table import (
     TransformerColumnWithDependenecies,
     TransformerTable,
 )
-from pathway.internals.rustpy_builder.operator_handler import OperatorHandler
-from pathway.internals.rustpy_builder.state import ScopeState
 
 
 class RowTransformerOperatorHandler(

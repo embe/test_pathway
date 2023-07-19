@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Callable, Dict, Iterable, List
 
-import pathway.internals.rustpy_builder.expression_evaluator as evaluator
+import pathway.internals.graph_runner.expression_evaluator as evaluator
 from pathway.internals import api, column, table, universe
 
 

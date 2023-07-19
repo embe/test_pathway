@@ -19,6 +19,7 @@ from pathway.internals.common import (
     make_tuple,
     numba_apply,
     require,
+    udf,
 )
 from pathway.internals.decorators import (
     attribute,
@@ -63,6 +64,7 @@ __all__ = [
     "cast",
     "reducers",
     "apply",
+    "udf",
     "apply_async",
     "apply_with_type",
     "attribute",

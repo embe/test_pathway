@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import functools
 from typing import Any, Callable, Optional, Union
 
 from pathway.internals import expression as expr
@@ -100,6 +101,42 @@ def apply(
     return expr.ApplyExpression(fun, None, *args, **kwargs)
 
 
+def udf(fun: Callable):
+    """Create a Python UDF (universal data function) out of a callable.
+
+    The output type of the UDF is determined based on its type annotation.
+
+    Example:
+    >>> import pathway as pw
+    >>> @pw.udf
+    ... def concat(left: str, right: str) -> str:
+    ...     return left+right
+    ...
+    >>> t1 = pw.debug.parse_to_table('''
+    ... age  owner  pet
+    ...     10  Alice  dog
+    ...     9    Bob  dog
+    ...     8  Alice  cat
+    ...     7    Bob  dog''')
+    >>> t2 = t1.select(col = concat(t1.owner, t1.pet))
+    >>> pw.debug.compute_and_print(t2, include_id=False)
+    col
+    Alicecat
+    Alicedog
+    Bobdog
+    Bobdog
+    """
+
+    @functools.wraps(fun)
+    def udf_fun(
+        *args: expr.ColumnExpressionOrConst,
+        **kwargs: expr.ColumnExpressionOrConst,
+    ):
+        return apply(fun, *args, **kwargs)
+
+    return udf_fun
+
+
 @runtime_type_check
 @trace_user_frame
 def numba_apply(
@@ -192,7 +229,7 @@ def apply_async(
 ) -> expr.ColumnExpression:
     r"""Applies function asynchronously to column expressions, column-wise.
     Output column type deduced from type-annotations of a function.
-    Eiterh a regular or async function can be passed.
+    Either a regular or async function can be passed.
 
     Example:
 

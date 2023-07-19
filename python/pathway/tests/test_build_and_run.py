@@ -14,11 +14,11 @@ from pathway import (
     transformer,
 )
 from pathway.debug import _markdown_to_pandas
-from pathway.internals import column, datasink, datasource, rustpy_builder
+from pathway.internals import column, datasink, datasource, graph_runner
 from pathway.internals.decorators import table_from_datasource
+from pathway.internals.graph_runner.state import ScopeState
 from pathway.internals.monitoring import MonitoringLevel
 from pathway.internals.parse_graph import G
-from pathway.internals.rustpy_builder.state import ScopeState
 from pathway.io import csv
 from pathway.tests.utils import T, TestDataSource, xfail_on_python
 
@@ -34,7 +34,7 @@ def test_process_only_relevant_nodes():
         assert state.has_table(input2)
         assert state.has_table(output)
 
-    rustpy_builder.RustpyBuilder(
+    graph_runner.GraphRunner(
         G, debug=False, monitoring_level=MonitoringLevel.NONE
     ).run_tables(output, after_build=validate)
 
@@ -50,7 +50,7 @@ def test_process_relevant_nodes_and_debug_nodes():
         assert state.has_table(input2)
         assert not state.has_table(input3)
 
-    rustpy_builder.RustpyBuilder(
+    graph_runner.GraphRunner(
         G, debug=True, monitoring_level=MonitoringLevel.NONE
     ).run_tables(input1, after_build=validate)
 
@@ -68,7 +68,7 @@ def test_process_output_nodes(tmp_path: pathlib.Path):
         assert not state.has_table(input1)
         assert state.has_table(input2)
 
-    rustpy_builder.RustpyBuilder(
+    graph_runner.GraphRunner(
         G, debug=False, monitoring_level=MonitoringLevel.NONE
     ).run_outputs(after_build=validate)
     assert os.path.exists(file_path)
@@ -89,7 +89,7 @@ def test_process_output_nodes_and_debug_nodes(tmp_path: pathlib.Path):
         assert state.has_table(input2)
         assert not state.has_table(input3)
 
-    rustpy_builder.RustpyBuilder(
+    graph_runner.GraphRunner(
         G, debug=True, monitoring_level=MonitoringLevel.NONE
     ).run_outputs(after_build=validate)
     assert os.path.exists(file_path)
@@ -103,7 +103,7 @@ def test_process_all_nodes():
         assert state.has_table(input1)
         assert state.has_table(input2)
 
-    rustpy_builder.RustpyBuilder(G, monitoring_level=MonitoringLevel.NONE).run_all(
+    graph_runner.GraphRunner(G, monitoring_level=MonitoringLevel.NONE).run_all(
         after_build=validate
     )
 
@@ -127,7 +127,7 @@ def test_debug_datasource():
         """
     )
 
-    result, expected = rustpy_builder.RustpyBuilder(
+    result, expected = graph_runner.GraphRunner(
         G, debug=True, monitoring_level=MonitoringLevel.NONE
     ).run_tables(input1, input2)
 
@@ -148,7 +148,7 @@ def test_debug_datasource_schema_mismatch():
     )
 
     with pytest.raises(ValueError):
-        rustpy_builder.RustpyBuilder(
+        graph_runner.GraphRunner(
             G, debug=True, monitoring_level=MonitoringLevel.NONE
         ).run_tables(input)
 
@@ -173,7 +173,7 @@ def test_process_only_relevant_columns():
         assert not state.has_column(filtered._get_column("foo"))
         assert not state.has_column(filtered._get_column("baz"))
 
-    rustpy_builder.RustpyBuilder(G, monitoring_level=MonitoringLevel.NONE).run_tables(
+    graph_runner.GraphRunner(G, monitoring_level=MonitoringLevel.NONE).run_tables(
         result, after_build=validate
     )
 
@@ -192,7 +192,7 @@ def test_process_columns_of_debug_nodes():
         assert state.has_column(input.foo._column)
         assert state.has_column(result.foo._column)
 
-    rustpy_builder.RustpyBuilder(
+    graph_runner.GraphRunner(
         G, debug=True, monitoring_level=MonitoringLevel.NONE
     ).run_outputs(after_build=validate)
 
@@ -216,7 +216,7 @@ def test_process_row_transformer_columns_if_needed():
         """
     ).select(*this)
 
-    builder = rustpy_builder.RustpyBuilder(G, monitoring_level=MonitoringLevel.NONE)
+    builder = graph_runner.GraphRunner(G, monitoring_level=MonitoringLevel.NONE)
 
     result1 = foo_transformer(input).table
 
@@ -264,7 +264,7 @@ def test_groupby_cache():
         )
         assert len(groupby_contexts) == 1
 
-    rustpy_builder.RustpyBuilder(G, monitoring_level=MonitoringLevel.NONE).run_all(
+    graph_runner.GraphRunner(G, monitoring_level=MonitoringLevel.NONE).run_all(
         after_build=validate
     )
 
@@ -296,7 +296,7 @@ def test_groupby_cache_multiple_cols():
         )
         assert len(groupby_contexts) == 1
 
-    rustpy_builder.RustpyBuilder(G, monitoring_level=MonitoringLevel.NONE).run_all(
+    graph_runner.GraphRunner(G, monitoring_level=MonitoringLevel.NONE).run_all(
         after_build=validate
     )
 
@@ -329,6 +329,6 @@ def test_groupby_cache_similar_tables():
         )
         assert len(groupby_contexts) == 1
 
-    rustpy_builder.RustpyBuilder(G, monitoring_level=MonitoringLevel.NONE).run_all(
+    graph_runner.GraphRunner(G, monitoring_level=MonitoringLevel.NONE).run_all(
         after_build=validate
     )

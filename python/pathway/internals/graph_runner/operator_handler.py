@@ -32,6 +32,9 @@ from pathway.internals.datasource import (
     GenericDataSource,
     PandasDataSource,
 )
+from pathway.internals.graph_runner.expression_evaluator import ExpressionEvaluator
+from pathway.internals.graph_runner.scope_context import ScopeContext
+from pathway.internals.graph_runner.state import ScopeState
 from pathway.internals.operator import (
     ContextualizedExpressionOperator,
     DebugOperator,
@@ -40,12 +43,9 @@ from pathway.internals.operator import (
     Operator,
     OutputOperator,
 )
-from pathway.internals.rustpy_builder.expression_evaluator import ExpressionEvaluator
-from pathway.internals.rustpy_builder.scope_context import ScopeContext
-from pathway.internals.rustpy_builder.state import ScopeState
 
 if TYPE_CHECKING:
-    from pathway.internals.rustpy_builder import RustpyBuilder
+    from pathway.internals.graph_runner import GraphRunner
 
 
 T = TypeVar("T", bound=Operator)
@@ -55,7 +55,7 @@ class OperatorHandler(ABC, Generic[T]):
     scope: api.Scope
     state: ScopeState
     scope_context: ScopeContext
-    graph_builder: RustpyBuilder
+    graph_builder: GraphRunner
     operator_id: Optional[int]
 
     _operator_mapping: ClassVar[Dict[Type[Operator], Type[OperatorHandler]]] = {}
@@ -66,7 +66,7 @@ class OperatorHandler(ABC, Generic[T]):
         scope: api.Scope,
         state: ScopeState,
         context: ScopeContext,
-        graph_builder: RustpyBuilder,
+        graph_builder: GraphRunner,
         operator_id: Optional[int],
     ):
         self.scope = scope
@@ -235,7 +235,7 @@ class DebugOperatorHandler(
         scope: api.Scope,
         state: ScopeState,
         context: ScopeContext,
-        graph_builder: RustpyBuilder,
+        graph_builder: GraphRunner,
         operator_id: Optional[int],
     ):
         super().__init__(scope, state, context, graph_builder, operator_id)

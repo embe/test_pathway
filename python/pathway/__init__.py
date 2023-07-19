@@ -65,6 +65,7 @@ from pathway.internals import (
     sql,
     this,
     transformer,
+    udf,
     universes,
 )
 from pathway.internals.api import PathwayType as Type
@@ -81,6 +82,7 @@ __all__ = [
     "indexing",
     "ml",
     "apply",
+    "udf",
     "apply_async",
     "apply_with_type",
     "attribute",

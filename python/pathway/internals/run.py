@@ -3,9 +3,9 @@
 # Proprietary and confidential.
 
 from pathway.internals import parse_graph
+from pathway.internals.graph_runner import GraphRunner
 from pathway.internals.monitoring import MonitoringLevel
 from pathway.internals.runtime_type_check import runtime_type_check
-from pathway.internals.rustpy_builder import RustpyBuilder
 
 
 @runtime_type_check
@@ -28,7 +28,7 @@ def run(
         default_logging: whether to allow pathway to set its own logging handler. Set
             it to False if you want to set your own logging handler.
     """
-    RustpyBuilder(
+    GraphRunner(
         parse_graph.G,
         debug=debug,
         monitoring_level=monitoring_level,
@@ -44,7 +44,7 @@ def run_all(
     with_http_server: bool = False,
     default_logging: bool = True,
 ):
-    RustpyBuilder(
+    GraphRunner(
         parse_graph.G,
         debug=debug,
         monitoring_level=monitoring_level,

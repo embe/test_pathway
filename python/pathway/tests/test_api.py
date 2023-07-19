@@ -16,7 +16,7 @@ from .utils import assert_equal_tables, assert_equal_tables_wo_index, xfail_on_r
 
 @pytest.fixture
 def event_loop():
-    from pathway.internals.rustpy_builder import async_utils
+    from pathway.internals.graph_runner import async_utils
 
     with async_utils.new_event_loop() as event_loop:
         yield event_loop

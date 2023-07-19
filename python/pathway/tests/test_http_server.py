@@ -7,7 +7,7 @@ import urllib
 import pytest
 
 import pathway as pw
-from pathway.internals import rustpy_builder
+from pathway.internals import graph_runner
 from pathway.internals.environ import engine_version
 from pathway.internals.parse_graph import G
 from pathway.tests.utils import T
@@ -43,7 +43,7 @@ def test_http_server_runs_when_enabled():
         response_code=pw.apply_async(http_server_status, table.foo, max_retries=4)
     )
 
-    result = rustpy_builder.RustpyBuilder(
+    result = graph_runner.GraphRunner(
         G, with_http_server=True, monitoring_level=pw.MonitoringLevel.NONE
     ).run_tables(response_code)[0]
     assert list(result.values())[0][0] == 200
@@ -65,7 +65,7 @@ def test_http_server_doesnt_run_when_disabled():
         response_code=pw.apply_async(http_server_status, table.foo)
     )
 
-    result = rustpy_builder.RustpyBuilder(
+    result = graph_runner.GraphRunner(
         G, with_http_server=False, monitoring_level=pw.MonitoringLevel.NONE
     ).run_tables(response_code)[0]
     assert list(result.values())[0][0] == -1

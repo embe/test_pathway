@@ -15,15 +15,15 @@ import pandas as pd
 from pathway.internals import api, parse_graph
 from pathway.internals.datasource import PandasDataSource
 from pathway.internals.decorators import table_from_datasource
+from pathway.internals.graph_runner import GraphRunner
 from pathway.internals.monitoring import MonitoringLevel
 from pathway.internals.runtime_type_check import runtime_type_check
-from pathway.internals.rustpy_builder import RustpyBuilder
 from pathway.internals.table import Table
 
 
 @runtime_type_check
 def table_to_dicts(table: Table):
-    [captured] = RustpyBuilder(
+    [captured] = GraphRunner(
         parse_graph.G, debug=True, monitoring_level=MonitoringLevel.NONE
     ).run_tables(table)
     keys = list(captured.keys())
