@@ -1,0 +1,104 @@
+name: Public repo build tests
+on:
+  schedule:
+    - cron: '25 2 * * 4'
+  push:
+    branches:
+      - main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  Build_packages:
+    name: Build packages
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Git checkout
+        uses: actions/checkout@v3.3.0
+
+      - name: License files
+        run: |
+          rm -f LICENSE_*-LICENSE-*
+          for filename in library_licenses/*; do cp "$filename" "LICENSE_$(basename "${filename}")"; done;
+
+      - name: Build package Ubuntu
+        uses: PyO3/maturin-action@v1
+        with:
+          maturin-version: 0.14.17
+          command: build
+          args: --release --strip
+          manylinux: auto
+          rustup-components: rust-std
+          working-directory: . #before move to public repo change it!
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: "pathway-${{ matrix.python-version  }}"
+          path: target/wheels/
+          
+  Verify_Linux:
+    needs: Build_packages
+    name: Verify packages
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Download articacts    
+        uses: actions/download-artifact@master
+        with:
+          name: pathway-${{ matrix.python-version }}
+          path: target/wheels/
+          
+      - name: Install and verify ${{ matrix.python-version }} package
+        run: |
+          set -ex
+          pip install pytest==7.1.3 geopy==2.2.0 textblob==0.17.1
+          pip install --prefer-binary target/wheels/pathway-*.whl
+          python -m pytest --pyargs pathway
+
+  Notify_on_failure:
+    needs:
+      - Build_packages
+      - Verify_Linux
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Post to a Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: "{{secret.SLACK_CHANNEL_ID}}"
+          payload: |
+            {
+              "text": "GitHub Action build result: failure :manul:\nAction run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: failure :manul:\nAction run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\n"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
