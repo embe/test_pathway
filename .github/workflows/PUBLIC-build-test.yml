@@ -37,7 +37,7 @@ jobs:
           args: --release --strip
           manylinux: auto
           rustup-components: rust-std
-          working-directory: . #before move to public repo change it!
+          working-directory: .
       
       - name: Upload artifact
         uses: actions/upload-artifact@v3
