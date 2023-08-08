@@ -1,3 +1,12 @@
+---
+name: Issue Template
+about: Create an issue to help us improve the project
+title: '[Issue Title]'
+labels: [to clarify]
+assignees: ''
+
+---
+
 ## Problem Description
 
 [Short description of the problem or bug]
@@ -24,8 +33,8 @@
 [Any additional information that might be helpful]
 
 ## Environment
-- Pathway Version: [Framework version]
-- Python Version: [Python Version]
+- Pathway Version: [Pathway version]
+- Python Version: [Python version]
 - Operating System: [Operating System Name]
 
 ## Sample Code
