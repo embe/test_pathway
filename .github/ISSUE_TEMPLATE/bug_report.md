@@ -1,7 +1,7 @@
 ---
-name: Issue Template
+name: Bug report
 about: Create an issue to help us improve the project
-title: '[Issue Title]'
+title: '[Bug Title]'
 labels: [to clarify]
 assignees: ''
 
@@ -24,7 +24,7 @@ assignees: ''
 
 [Description of the current undesired behavior]
 
-### Screenshots
+### Screenshots/Logs
 
 [If possible, add screenshots illustrating the problem]
 
@@ -35,6 +35,7 @@ assignees: ''
 ## Environment
 - Pathway Version: [Pathway version]
 - Python Version: [Python version]
+- CPU Architecture: [x86, x86_x64, arm64]
 - Operating System: [Operating System Name]
 
 ## Sample Code
