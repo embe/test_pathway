@@ -1,38 +1,46 @@
 ---
-name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+name: Issue Template
+about: Create an issue to help us improve the project
+title: '[Issue Title]'
+labels: [to clarify]
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Problem Description
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+[Short description of the problem or bug]
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+### Steps to Reproduce
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+1. [Steps to reproduce the problem]
+2. [Additional steps, if needed]
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+### Expected Behavior
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+[Clear description of what should happen]
 
-**Additional context**
-Add any other context about the problem here.
+### Current Behavior
+
+[Description of the current undesired behavior]
+
+### Screenshots
+
+[If possible, add screenshots illustrating the problem]
+
+### Additional Information
+
+[Any additional information that might be helpful]
+
+## Environment
+
+- Version: [Python/Project/Framework version]
+- Operating System: [Operating System Name]
+
+## Sample Code
+
+[If applicable, provide a code example]
+
+## Notes
+
+[Any additional notes or remarks regarding the issue]
