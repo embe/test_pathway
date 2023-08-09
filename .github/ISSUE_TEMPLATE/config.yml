@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Questions & Help Github Discussions
+  - name: shoGithub Discussions
     url: https://github.com/pathwaycom/pathway/discussions
-    about: Discuss ideas for new features or enhancements
-  - name: Questions & Help Discord
+    about: We are using Discussions as a place to connect with other members of the Pathway community.
+  - name: Discord
     url: https://discord.com/invite/pathway
-    about: Please ask and answer questions here.
+    about: Ask questions you’re wondering about.
