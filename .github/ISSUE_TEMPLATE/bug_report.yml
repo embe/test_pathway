@@ -31,6 +31,7 @@ body:
     attributes:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      placeholder: Tell us what you see!
       render: shell
     validations:
       required: true
@@ -39,7 +40,7 @@ body:
     attributes:
       label: What did you expect to happen?
       description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
+      placeholder: Tell us what you want to see!
       value: Describe your expectations.
     validations:
       required: true
