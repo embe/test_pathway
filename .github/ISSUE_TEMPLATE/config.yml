@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ![Github](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)Questions & Help Github Discussions
+    url: https://github.com/grafana/grafana/discussions/new
+    about: Discuss ideas for new features or enhancements
+  - name: ![Discord](https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a69f118df70ad7828d4_icon_clyde_blurple_RGB.svg) Questions & Help Discord
+    url: https://discord.com/invite/pathway
+    about: Please ask and answer questions here.
