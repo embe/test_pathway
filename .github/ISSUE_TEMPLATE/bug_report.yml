@@ -12,8 +12,7 @@ body:
     attributes:
       label: What happened?
       description: What happened?
-      placeholder: Tell us what you see!
-        It would be nice if you could leave us the logs.
+      placeholder: Tell us what you see! It would be nice if you could leave us the logs.
     validations:
       required: true
   - type: textarea
