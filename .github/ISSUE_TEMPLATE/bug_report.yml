@@ -2,8 +2,6 @@ name: Bug Report
 description: File a bug report
 title: "[Bug]: "
 labels: ["bug", "triage"]
-# assignees:
-#   - octocat
 body:
   - type: markdown
     attributes:
@@ -36,11 +34,18 @@ body:
       value: Describe your expectations.
     validations:
       required: true
+  - type: textarea
+    id: pathway_version
+    attributes:
+      label: Version
+      description: On which version of Pathway are you working?
+    validations:
+      required: true
   - type: dropdown
     id: os_version
     attributes:
-      label: Version
-      description: On which OS version did you run Pathway?
+      label: OS
+      description: On which OS did you run Pathway?
       options:
         - Linux
         - MacOS
@@ -52,6 +57,5 @@ body:
       label: On which CPU architecture did you run Pathway?
       multiple: true
       options:
-        - x86_64
-        - arm64
-        - aarch64
+        - x86-64
+        - ARM64 (AArch64, Apple silicon)
