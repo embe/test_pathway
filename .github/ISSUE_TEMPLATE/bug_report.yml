@@ -1,6 +1,6 @@
 name: Bug Report
 description: File a bug report
-title: "[Bug]: "
+title: ""
 labels: ["bug", "triage"]
 body:
   - type: markdown
@@ -13,7 +13,6 @@ body:
       label: What happened?
       description: What happened?
       placeholder: Tell us what you see! <br> It would be nice if you could leave us the logs.
-      value: A bug description.
     validations:
       required: true
   - type: textarea
@@ -30,8 +29,7 @@ body:
     attributes:
       label: What did you expect to happen?
       description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you want to see.
-      value: Describe your expectations.
+      placeholder: Describe your expectations.
     validations:
       required: true
   - type: input
@@ -55,7 +53,7 @@ body:
     id: cpu_architecture
     attributes:
       label: On which CPU architecture did you run Pathway?
-      multiple: true
+      multiple: false
       options:
         - x86-64
         - ARM64 (AArch64, Apple silicon)
