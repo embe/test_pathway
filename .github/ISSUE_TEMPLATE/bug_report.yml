@@ -34,7 +34,7 @@ body:
       value: Describe your expectations.
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: pathway_version
     attributes:
       label: Version
