@@ -2,7 +2,7 @@ name: Public repo build tests
 on:
   # schedule:
   #   - cron: '25 2 * * 4'
-  push:
+  push: ######
     branches:
       - main
 concurrency:
